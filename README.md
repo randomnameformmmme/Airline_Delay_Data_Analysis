@@ -1,7 +1,7 @@
 # Airline Delay Prediction Analysis
 
 A comprehensive data analysis and machine learning project focused on predicting airline delays using classification models. This project analyzes over 539,000 flight records to identify key factors contributing to flight delays.
-*Modified_Airlines.csv files are not in the folder currently, but it can be extracted from Airline_Delay_Data_Analysis_3.ipynb file. 
+*Modified_Airlines.csv files are not in the folder currently, but it can be extracted from Airline_Delay_Data_Analysis_3.ipynb file.*
 
 ## Project Overview
 
