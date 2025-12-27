@@ -47,6 +47,50 @@ This project performs exploratory data analysis and develops machine learning mo
 - `flight_length`: Flight categories (Short, Medium, Long, Very Long)
 - `delay_status`: Categorical delay status (On-time/Delayed)
 
+## Project Structure
+
+```
+├── Airline_Delay_Data_Analysis__3_.ipynb    # Main analysis notebook
+├── decisiontreeds.py                         # Decision Tree classifier
+├── kNN_Model_Airline.py                      # k-Nearest Neighbors classifier
+├── Random_Forest.py                          # Random Forest classifier
+├── Airlines.csv                              # Original dataset
+└── Modified_Airlines.csv                     # Processed dataset with engineered features
+```
+
+### File Descriptions
+
+**Airline_Delay_Data_Analysis__3_.ipynb**
+- Complete exploratory data analysis workflow
+- Data cleaning and preprocessing
+- Feature engineering implementation
+- Statistical hypothesis testing
+- Chi-square analysis for categorical variables
+- Data visualization and insights generation
+
+**decisiontreeds.py**
+- Decision Tree classifier implementation
+- Uses entropy criterion for splitting
+- Features: DayOfWeek, departure_minutes, duration_minutes, flight_length
+- Model parameters: max_depth=3, min_samples_leaf=5
+- Outputs: confusion matrix, accuracy score, classification report
+
+**kNN_Model_Airline.py**
+- Custom k-Nearest Neighbors implementation from scratch
+- k=3 neighbors configuration
+- Includes data standardization using StandardScaler
+- Visualizations: confusion matrix heatmap, performance metrics bar chart
+- Metrics: accuracy, precision, recall, F1-score
+- Note: Uses subset of data (10,000 rows) for computational efficiency
+
+**Random_Forest.py**
+- Random Forest ensemble classifier
+- Comparison with Decision Tree performance
+- Features: DayOfWeek, departure_minutes, duration_minutes, flight_length, departure_tp
+- Model parameters: n_estimators=100, max_depth=None
+- Custom threshold adjustment (0.45) for class prediction
+- Feature importance analysis included
+
 ## Methodology
 
 ### Data Preprocessing
@@ -118,18 +162,91 @@ All factors showed statistically significant relationships with delay status (p 
 pip install pandas numpy scikit-learn matplotlib seaborn
 ```
 
+### Dataset Setup
+1. Download the Airlines dataset from [Kaggle](https://www.kaggle.com/datasets/jimschacko/airlines-dataset-to-predict-a-delay)
+2. Place `Airlines.csv` in your project directory
+
 ### Running the Analysis
-```python
-# Load the dataset
-import pandas as pd
-df = pd.read_csv('Airlines.csv')
 
-# Run preprocessing
-# (Include your preprocessing steps)
-
-# Execute analysis
-# (Include your analysis steps)
+#### 1. Data Preprocessing and EDA
+Run the Jupyter notebook for complete exploratory analysis:
+```bash
+jupyter notebook Airline_Delay_Data_Analysis__3_.ipynb
 ```
+
+This notebook will:
+- Load and inspect the raw dataset
+- Perform data cleaning and validation
+- Engineer new features
+- Conduct statistical hypothesis testing
+- Generate the `Modified_Airlines.csv` file for model training
+
+#### 2. Decision Tree Model
+```bash
+python decisiontreeds.py
+```
+Update the file path in the script:
+```python
+df = pd.read_csv('/path/to/your/Airlines.csv')
+```
+
+#### 3. k-Nearest Neighbors Model
+```bash
+python kNN_Model_Airline.py
+```
+Update the file path in the script:
+```python
+csv_file = "Modified_Airlines.csv"
+```
+Note: Default uses 10,000 rows for faster execution. Remove `df.head(10000)` to use full dataset.
+
+#### 4. Random Forest Model
+```bash
+python Random_Forest.py
+```
+Update the file path in the script:
+```python
+df = pd.read_csv('/path/to/your/Modified_Airlines.csv')
+```
+
+### Model Outputs
+
+All models provide:
+- Confusion matrix
+- Accuracy score (%)
+- Classification report (precision, recall, F1-score)
+
+Additional outputs:
+- **kNN**: Visualization plots for confusion matrix and performance metrics
+- **Random Forest**: Feature importance rankings
+
+## Model Performance
+
+### Classification Models Comparison
+
+**Decision Tree Classifier**
+- Criterion: Entropy
+- Max Depth: 3
+- Min Samples per Leaf: 5
+- Features Used: 4 (DayOfWeek, departure_minutes, duration_minutes, flight_length)
+
+**k-Nearest Neighbors (k-NN)**
+- k Value: 3
+- Distance Metric: Euclidean
+- Preprocessing: StandardScaler normalization
+- Features Used: All available features (one-hot encoded categorical variables)
+- Computational Note: Demonstrated on 10,000 sample subset
+
+**Random Forest Classifier**
+- Number of Estimators: 100
+- Max Depth: None (unlimited)
+- Min Samples per Leaf: 1
+- Features Used: 5 (DayOfWeek, departure_minutes, duration_minutes, flight_length, departure_tp)
+- Custom Prediction Threshold: 0.45
+- Class Balancing: Applied to handle imbalanced dataset
+
+### Feature Importance (Random Forest)
+The Random Forest model provides feature importance rankings, identifying which operational factors contribute most to delay predictions. Key features are ranked by their impact on model decisions.
 
 ## Key Insights
 
@@ -137,6 +254,27 @@ df = pd.read_csv('Airlines.csv')
 2. **Temporal Patterns**: Evening and afternoon flights are significantly more prone to delays
 3. **Weekly Trends**: Mid-week flights (especially Wednesday) show higher delay rates
 4. **Flight Duration**: Operational complexity in longer flights contributes to higher delays
+
+## Technical Implementation Notes
+
+### Data Processing Pipeline
+1. **Initial Data Loading**: Raw CSV import with 539,383 records
+2. **Feature Engineering**: Creation of 5 new features for improved interpretability
+3. **Categorical Encoding**: Conversion of categorical variables to numerical codes for model compatibility
+4. **Train-Test Split**: 70-30 split with random_state=100 for reproducibility
+
+### Code Organization
+- **Preprocessing Code**: Centralized in Jupyter notebook, reused across all model files
+- **Modular Design**: Each model in separate file for independent execution
+- **Consistent Evaluation**: All models use identical metrics for fair comparison
+
+### Performance Considerations
+- **kNN Memory Optimization**: Subset sampling (10,000 rows) to manage computational resources
+- **Random Forest Threshold Tuning**: Custom 0.45 threshold to optimize precision-recall tradeoff
+- **Class Imbalancing Handling**: Balanced class weights in Decision Tree and Random Forest
+
+### Reproducibility
+All models use `random_state=100` for consistent results across runs. The same train-test split ensures fair model comparison.
 
 ## Future Work
 
